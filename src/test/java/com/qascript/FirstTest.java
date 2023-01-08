@@ -20,7 +20,7 @@ public class FirstTest {
                 System.out.println("Title of the page is-3");
         options.addArguments("disable-gpu");
                 System.out.println("Title of the page is-4");
-        driver = new ChromeDriver(options);
+        driver = new ChromeDriver();
                 System.out.println("Title of the page is-5");
         driver.get("https://www.google.com");
         System.out.println("Title of the page is: " + driver.getTitle());
