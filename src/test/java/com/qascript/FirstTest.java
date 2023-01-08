@@ -20,8 +20,15 @@ public class FirstTest {
                 System.out.println("Title of the page is-3");
         options.addArguments("disable-gpu");
                 System.out.println("Title of the page is-4");
-        driver = new ChromeDriver(options);
+       
                 System.out.println("Title of the page is-5");
+        options.addArguments("start-maximized"); // open Browser in maximized mode
+        options.addArguments("disable-infobars"); // disabling infobars
+        options.addArguments("--disable-extensions"); // disabling extensions
+        options.addArguments("--disable-gpu"); // applicable to windows os only
+        options.addArguments("--disable-dev-shm-usage"); // overcome limited resource problems
+        options.addArguments("--no-sandbox"); // Bypass OS security model
+        driver = new ChromeDriver(options);
         driver.get("https://www.google.com");
         System.out.println("Title of the page is: " + driver.getTitle());
         Assert.assertTrue("Page title is not correct",driver.getTitle().equals("Google"));
