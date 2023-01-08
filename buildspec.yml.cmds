@@ -1,0 +1,92 @@
+version: 0.2
+
+#env:
+  #variables:
+     # key: "value"
+     # key: "value"
+  #parameter-store:
+     # key: "value"
+     # key: "value"
+  #secrets-manager:
+     # key: secret-id:json-key:version-stage:version-id
+     # key: secret-id:json-key:version-stage:version-id
+  #exported-variables:
+     # - variable
+     # - variable
+  #git-credential-helper: yes
+#batch:
+  #fast-fail: true
+  #build-list:
+  #build-matrix:
+  #build-graph:
+phases:
+  #install:
+    #If you use the Ubuntu standard image 2.0 or later, you must specify runtime-versions.
+    #If you specify runtime-versions and use an image other than Ubuntu standard image 2.0, the build fails.
+    #runtime-versions:
+      # name: version
+      # name: version
+    #commands:
+      # - command
+      # - command
+  pre_build:
+    commands:
+    - apt-get	update -y
+    - apt-get install wget
+    - apt-get install maven -y
+    #- apt-get install testing -y
+    - curl -sS -o - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add -
+    - echo "deb http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list
+    #- curl -sS -o – https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add
+    #- echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list
+    - sudo apt-get update -y
+    - sudo apt-get install google-chrome-stable -y
+
+    #- wget https://chromedriver.storage.googleapis.com/99.0.4844.51/chromedriver_linux64.zip
+    - version=$(curl -s "https://chromedriver.storage.googleapis.com/LATEST_RELEASE")
+    - wget https://chromedriver.storage.googleapis.com/${version}/chromedriver_linux64.zip
+    - unzip chromedriver_linux64.zip
+    - ls
+    - whoami
+    - mv chromedriver /usr/bin/chromedriver
+    - chown root:root /usr/bin/chromedriver
+    - chmod 0755 /usr/bin/chromedriver
+    #- wget https://selenium-release.storage.googleapis.com/3.13/selenium-server-standalone-3.13.0.jar
+    #- wget https://github.com/SeleniumHQ/selenium/releases/download/selenium-4.7.0/selenium-server-4.7.2.jar
+    - pwd
+    - ls
+    - google-chrome --version
+    - chromedriver --version
+
+  build:
+    commands:
+      - mvn test
+      - ls
+      # - command
+  #post_build:
+    #commands:
+      # - command
+      # - command
+reports: #New
+  SurefireReports: # CodeBuild will create a report group called "SurefireReports".
+    files: #Store all of the files
+      - '**/*'
+    base-directory: 'target/surefire-reports' # Location of the reports 
+#reports:
+  #report-name-or-arn:
+    #files:
+      # - location
+      # - location
+    #base-directory: location
+    #discard-paths: yes
+    #file-format: JunitXml | CucumberJson
+#artifacts:
+  #files:
+    # - location
+    # - location
+  #name: $(date +%Y-%m-%d)
+  #discard-paths: yes
+  #base-directory: location
+#cache:
+  #paths:
+    # - paths
